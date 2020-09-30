@@ -1,0 +1,36 @@
+let angle = 100;
+let max_distance;
+
+function setup() {
+  createCanvas(500, 500, WEBGL);
+  max_distance = dist(0, 0, 80, 80);
+}
+
+function draw() {
+  background(50);
+  rectMode(CENTER);
+  ortho(-400, 400, -400, 400, 0, 800);
+  
+  let offset = 0.5;
+  let box_width = 40;
+  let color1 = color(0, 50, 200);
+  let color2 = color(100, 10, 220);
+
+  rotateX(-PI/4);
+  rotateY(atan(1 / sqrt(2)));
+  
+  for (let z = 0; z < height; z += box_width + 5) {
+    for (let x = 0; x < width; x += box_width + 5) {
+      push();
+      let distance = dist(width/2, height/2, x, z);
+      let offset = map(distance, 0, max_distance, 1, -1);
+      let a = angle + offset;
+      let h = map(sin(a), -1, 1, 0, 250);
+      fill(lerpColor(color1, color2, (millis()%2000)/2000.0));
+      translate(x - width/2, 0, z - height/2);
+      box(box_width, h, box_width);
+      pop();
+    }
+  }
+  angle += 0.09;
+}
